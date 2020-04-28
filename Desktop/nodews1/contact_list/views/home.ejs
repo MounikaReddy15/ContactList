@@ -3,25 +3,43 @@
         <title>
     <%= title%>
     </title>
+    <link rel="stylesheet" href="/css/home.css">
+    <script src="https://kit.fontawesome.com/fffae971ca.js" crossorigin="anonymous"></script>
     </head>
     <body>
-        <h1> Contact List </h1>
-        <div>
+        
+        <h1 id="page-heading"> 
+            <i class="fas fa-address-book"></i>
+            My Contacts List </h1>
+        <div id= "contact-list-container">
             <ul>
        <% for(let i of contact_list){ %> 
     
-            <li>
+            <li class= "contact"> 
+                <div class = "details">
         <p><%= i.name %> </p>
         <p><%= i.phone %> </p>
+    </div>
+    <div class = "delete-button">
+        <!-- <a href="/delete-contact/<%= i.phone %>"> -->
+        <!-- another way -->
+        <a href="/delete-contact/?phone=<%= i.phone %>""> 
+            <!-- &name=<%= i.name %>"> -->
+            <i class ="fas fa-window-close"></i>
+        </a>
+
+    </div>
     </li>
 
           <% } %>
     </ul>
 </div> 
-      <form action="/create-contact" method="POST">
+      <form id ="new-contact-from" action="/create-contact" method="POST">
       <input type="text" name="name" placeholder="Enter Name" required>
       <input type="text" name="phone" placeholder="Enter Phone" required>
       <button type="submit"> Add Contact</button>
     </form>
+
+    <script src= "/js/home.js"></script>
     </body>
 </html>

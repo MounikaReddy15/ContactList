@@ -14,7 +14,28 @@ app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
 //app.use signifies middleware
+//middleware is a func which has access to both req & res
+//express.url encoded is called before every controller
+//url encoded reads the form data not the params
 app.use(express.urlencoded());
+
+// to access static files
+app.use(express.static('assets'));
+
+//middleware 1
+//next calls next middleware else controller
+app.use(function(req,res,next){
+    //to manipulate data
+    // req.myName = "Mona";
+    // console.log('m1 called');
+    next();
+});
+app.use(function(req,res,next){
+    // console.log("my name from mw2", req.myName);
+    // console.log('m2 called');
+    next();
+});
+
 
 var contactList = [
     {
@@ -42,12 +63,17 @@ app.get('/', function(req,res) {
 
     //displays home.ejs
     // return res.render('home');
+ 
+    // to access middleware data here 
+    //middleware can be at beginning, in and after controllers
+//   console.log('route controller',  req.myName);
+     
 
     //to change title dynamically
     return res.render('home', 
     {title: 'Contacts List',
     contact_list: contactList
-
+ 
 });
 
 });
@@ -78,6 +104,22 @@ app.post('/create-contact', function(req,res){
     // return res.redirect('/practice');
 });
 
+//string param   
+//  app.get('/delete-contact/:phone', function(req,res) {
+    app.get('/delete-contact', function(req,res) {
+
+        // console.log(req.params);
+        // let phone= req.params.phone;
+
+        let phone = req.query.phone;
+        let contactIndex =  contactList.findIndex(contact => contact.phone == phone);
+
+        if(contactIndex!=-1) {
+            contactList.splice(contactIndex ,1);
+        }
+
+        return res.redirect('back');
+    });
 
 //to run the server
 app.listen(port, function(err) {
