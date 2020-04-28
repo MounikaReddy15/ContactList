@@ -4,6 +4,9 @@ const express = require('express');
 const path = require('path');
 const port = 8000;
 
+const db= require('./config/mongoose');
+
+
 //app has all the functionalities of the above libraries
 
 const app = express();
