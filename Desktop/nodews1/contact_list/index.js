@@ -13,7 +13,20 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-
+var contactList = [
+    {
+        name: "Mona",
+        phone: "678890"
+    },
+    {
+       name: "Raju",
+       phone: "34567"
+    },
+    {
+        name: "Nenu",
+        phone: "0000"
+    }
+]
 //to handle req res
 app.get('/', function(req,res) {
     // console.log(req);
@@ -29,7 +42,10 @@ app.get('/', function(req,res) {
 
     //to change title dynamically
     return res.render('home', 
-    {'title': 'My Contacts List'});
+    {title: 'Contacts List',
+    contact_list: contactList
+
+});
 
 });
 
