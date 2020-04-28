@@ -13,6 +13,9 @@ const app = express();
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
+//app.use signifies middleware
+app.use(express.urlencoded());
+
 var contactList = [
     {
         name: "Mona",
@@ -55,9 +58,28 @@ app.get('/practice', function(req,res) {
     {'title' : 'Let us play with ejs'});
 });
    
+app.post('/create-contact', function(req,res){
+    //shows objects
+    // console.log(req.body);
+    
+    // contactList.push({
+    //     name : req.body.name,
+    //     phone : req.body.phone
+    // });
+    // can be written as
+
+    contactList.push(req.body);
+
+    return res.redirect('/');
+    
+    //going back to the same page
+    //return res.redirect('back');
+    
+    // return res.redirect('/practice');
+});
+
 
 //to run the server
-
 app.listen(port, function(err) {
     if(err) {
         console.log('error', err);
