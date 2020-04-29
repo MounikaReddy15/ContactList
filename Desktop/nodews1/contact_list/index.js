@@ -5,6 +5,7 @@ const path = require('path');
 const port = 8000;
 
 const db= require('./config/mongoose');
+const Contact = require('./models/contact');
 
 
 //app has all the functionalities of the above libraries
@@ -71,13 +72,21 @@ app.get('/', function(req,res) {
     //middleware can be at beginning, in and after controllers
 //   console.log('route controller',  req.myName);
      
-
-    //to change title dynamically
+  //fetch contacts db
+  // find is used for quering
+  Contact.find({}, function(err, contactList) {
+      if(err) {
+          console.log('Error in fetching contacts from db');
+          return;
+      }
+      //to change title dynamically
     return res.render('home', 
     {title: 'Contacts List',
     contact_list: contactList
  
 });
+  })
+    
 
 });
 
@@ -97,9 +106,22 @@ app.post('/create-contact', function(req,res){
     // });
     // can be written as
 
-    contactList.push(req.body);
+    // contactList.push(req.body);
+    
+    //now we have to push in DB/collection
+    Contact.create ({
+          name: req.body.name,
+          phone: req.body.phone
+    },function(err, newContact){
+        if(err) {
+            console.log('error in creating a contact');
+            return;
+        }
 
-    return res.redirect('/');
+        console.log('******', newContact);
+        return res.redirect('back');
+    });
+    // return res.redirect('/');
     
     //going back to the same page
     //return res.redirect('back');
@@ -114,14 +136,31 @@ app.post('/create-contact', function(req,res){
         // console.log(req.params);
         // let phone= req.params.phone;
 
-        let phone = req.query.phone;
-        let contactIndex =  contactList.findIndex(contact => contact.phone == phone);
+        //query param
+        // let phone = req.query.phone;
 
-        if(contactIndex!=-1) {
-            contactList.splice(contactIndex ,1);
-        }
+        //get the id from query in the url
+        let id = req.query.id;
 
-        return res.redirect('back');
+        //find the contact in the db using id and delete
+       Contact.findByIdAndDelete(id, function(err) {
+           if(err) {
+               console.log('error in deleting an object from the db');
+               return;
+           }
+           return res.redirect('back');
+       });
+
+
+
+
+        // let contactIndex =  contactList.findIndex(contact => contact.phone == phone);
+
+        // if(contactIndex!=-1) {
+        //     contactList.splice(contactIndex ,1);
+        // }
+
+        
     });
 
 //to run the server
