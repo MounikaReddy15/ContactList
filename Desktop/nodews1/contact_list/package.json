@@ -18,7 +18,7 @@
   "homepage": "https://github.com/MounikaReddy15/ContactList#readme",
   "dependencies": {
     "ejs": "^3.1.2",
-    "express": "^4.17.1",
+    "express": "^4.17.3",
     "mongoose": "^5.9.10"
   }
 }
